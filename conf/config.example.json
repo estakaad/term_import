@@ -3,18 +3,17 @@
     "api_key": "12345678-abcd-1234-efgh-123456abcdef",
     "base_url": "https://ekitest.tripledev.ee/ekilex"
   },
-  "environment": "test",
   "parameters": {
     "crudRoleDataset": "usu-3110"
   },
   "sources_files": {
-    "sources_without_ids": "files/usu/sources.json",
-    "sources_with_ids": "files/usu/sources_with_ids.json",
-    "ids_of_added_sources": "files/usu/ids_of_added_sources.json"
+    "sources_without_ids": "files/usu-3110/sources.json",
+    "sources_with_ids": "files/usu-3110/sources_with_ids.json",
+    "ids_of_added_sources": "files/usu-3110/ids_of_added_sources.json"
   },
   "concepts_files": {
-    "concepts_without_word_ids": "files/usu/concepts_without_word_ids.json",
-    "concepts_with_word_ids": "files/usu/concepts_with_word_ids.json",
-    "ids_of_concepts_added": "files/usu/ids_of_concepts_added.json"
+    "concepts_without_word_ids": "files/usu-3110/concepts_without_word_ids.json",
+    "concepts_with_word_ids": "files/usu-3110/concepts_with_word_ids.json",
+    "ids_of_concepts_added": "files/usu-3110/ids_of_concepts_added.json"
   }
 }
