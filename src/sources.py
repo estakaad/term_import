@@ -100,28 +100,6 @@ def delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_datas
     logger.info('Number of deleted sources: ' + str(len(list_of_ids_of_deleted_sources)))
 
 
-def update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset):
-    list_of_ids_of_updated_sources = []
-
-    logger.info(f'Started updating sources: {sources_with_ids}')
-
-    with open(sources_with_ids, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-        for source in data:
-            result = update_source(source, api_key, base_url, crud_role_dataset)
-            if result:
-                list_of_ids_of_updated_sources.append(source['id'])
-
-    with open(ids_of_updated_sources, 'w', encoding='utf-8') as f:
-        json.dump(list_of_ids_of_updated_sources, f, ensure_ascii=False, indent=4)
-
-    logger.info(f'Created list of ID-s of updated sources: {list_of_ids_of_updated_sources}')
-    logger.info('Number of created sources: ' + str(len(list_of_ids_of_updated_sources)))
-
-    return list_of_ids_of_updated_sources
-
-
 def update_source(source, api_key, base_url, crud_role_dataset):
 
     header = {"ekilex-api-key": api_key}
@@ -150,3 +128,25 @@ def update_source(source, api_key, base_url, crud_role_dataset):
                        f"Status code: {response.status_code}, "
                        f"Response text: {response.text}")
     return None
+
+
+def update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset):
+    list_of_ids_of_updated_sources = []
+
+    logger.info(f'Started updating sources: {sources_with_ids}')
+
+    with open(sources_with_ids, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+        for source in data:
+            result = update_source(source, api_key, base_url, crud_role_dataset)
+            if result:
+                list_of_ids_of_updated_sources.append(source['id'])
+
+    with open(ids_of_updated_sources, 'w', encoding='utf-8') as f:
+        json.dump(list_of_ids_of_updated_sources, f, ensure_ascii=False, indent=4)
+
+    logger.info(f'Created list of ID-s of updated sources: {list_of_ids_of_updated_sources}')
+    logger.info('Number of updated sources: ' + str(len(list_of_ids_of_updated_sources)))
+
+    return list_of_ids_of_updated_sources
