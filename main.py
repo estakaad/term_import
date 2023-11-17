@@ -1,6 +1,7 @@
 from utils.config_loader import load_config, get_file_path
 import src.sources as sources
 import src.words as words
+import src.concepts as concepts
 
 # Load the configuration and crud_role_dataset
 config_path = 'conf/test.json'
@@ -22,14 +23,16 @@ concepts_without_word_ids = get_file_path(crud_role_dataset, "concepts_files", "
 concepts_with_word_ids = get_file_path(crud_role_dataset, "concepts_files", "concepts_with_word_ids")
 words_without_id = get_file_path(crud_role_dataset, "concepts_files", "words_without_id")
 words_with_more_than_one_id = get_file_path(crud_role_dataset, "concepts_files", "words_with_more_than_one_id")
-ids_of_concepts_added = get_file_path(crud_role_dataset, "concepts_files", "ids_of_concepts_added")
+concepts_saved = get_file_path(crud_role_dataset, "concepts_files", "concepts_saved")
+concepts_not_saved = get_file_path(crud_role_dataset, "concepts_files", "concepts_not_saved")
 
 # SOURCES #
-#sources.create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, api_key, base_url, crud_role_dataset)
-#sources.update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset)
-#sources.delete_sources(ids_of_updated_sources, ids_of_deleted_sources, crud_role_dataset, api_key, base_url)
+sources.create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, api_key, base_url, crud_role_dataset)
+sources.update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset)
+sources.delete_sources(ids_of_updated_sources, ids_of_deleted_sources, crud_role_dataset, api_key, base_url)
 
 # CONCEPTS #
 words.update_word_ids(concepts_without_word_ids, concepts_with_word_ids,
-                      words_without_id, words_with_more_than_one_id,
-                      api_key, base_url, crud_role_dataset, dataset_for_checking_word_ids)
+                     words_without_id, words_with_more_than_one_id,
+                    api_key, base_url, crud_role_dataset, dataset_for_checking_word_ids)
+concepts.import_concepts(concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, api_key, base_url)

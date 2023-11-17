@@ -26,7 +26,8 @@ def get_file_path(crud_role_dataset, file_category, file_key):
             "concepts_with_word_ids": "concepts_with_word_ids.json",
             "words_without_id": "words_without_id.json",
             "words_with_more_than_one_id": "words_with_more_than_one_id.json",
-            "ids_of_concepts_added": "ids_of_concepts_added.json"
+            "concepts_saved": "concepts_saved.json",
+            "concepts_not_saved": "concepts_not_saved.json"
         }
     }
     return base_path + file_paths[file_category][file_key]
