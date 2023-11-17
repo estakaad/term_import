@@ -9,7 +9,9 @@
   "sources_files": {
     "sources_without_ids": "files/usu-3110/sources.json",
     "sources_with_ids": "files/usu-3110/sources_with_ids.json",
-    "ids_of_added_sources": "files/usu-3110/ids_of_added_sources.json"
+    "ids_of_added_sources": "files/usu-3110/ids_of_added_sources.json",
+    "ids_of_updated_sources": "files/usu-3110/ids_of_updated_sources.json",
+    "ids_of_deleted_sources": "files/usu-3110/ids_of_deleted_sources.json"
   },
   "concepts_files": {
     "concepts_without_word_ids": "files/usu-3110/concepts_without_word_ids.json",

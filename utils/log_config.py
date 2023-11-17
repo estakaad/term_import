@@ -11,7 +11,7 @@ def get_logger():
             os.mkdir('logs')
 
         now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        file_name = f'logs/import_log_{now}.log'
+        file_name = f'logs/{now}.log'
         file_handler = logging.FileHandler(file_name, mode='a', encoding='utf-8')
         file_handler.setLevel(logging.DEBUG)
         file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
