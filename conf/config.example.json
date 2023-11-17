@@ -4,6 +4,7 @@
     "base_url": "https://ekitest.tripledev.ee/ekilex"
   },
   "parameters": {
-    "crudRoleDataset": "usu-3110"
+    "crudRoleDataset": "usu-3110",
+    "datasetForWordIds": "eki"
   }
 }
