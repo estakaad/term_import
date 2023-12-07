@@ -31,7 +31,7 @@ def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_wit
                     logger.info(f'Word \'{word["value"]}\' ({word["lang"]}) has more than one instances in \'{dataset}\'')
             else:
                 words_without_id.append(word['value'])
-                logger.info(f'Word \'{word["value"]}\' ({word["lang"]}) does not have instances in \'{dataset}\'')
+                logger.info(f'Cannot find instance of word \'{word["value"]}\' ({word["lang"]}) in \'{dataset}\'')
 
         concepts_with_word_ids_list.append(concept)
 
