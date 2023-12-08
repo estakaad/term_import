@@ -2,6 +2,9 @@ from utils.config_loader import load_config, get_file_path
 import src.sources as sources
 import src.words as words
 import src.concepts as concepts
+import utils
+
+logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
 config_path = 'conf/mere_test.json'
