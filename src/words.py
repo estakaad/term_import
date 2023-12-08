@@ -37,22 +37,22 @@ def process_concepts(data_subset, api_key, base_url, crud_role_dataset, dataset,
         raise
 
 
-def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_without_id_file, words_with_more_than_one_id_file, api_key, base_url, crud_role_dataset, dataset):
+def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_without_id_file, words_with_more_than_one_id_file, api_key, base_url, crud_role_dataset, dataset, num_threads):
     with open(concepts_without_word_ids, 'r', encoding='utf-8') as file:
         concepts = json.load(file)
 
-    part_size = len(concepts) // 10
+    part_size = len(concepts) // num_threads
     threads = []
     results_lock = threading.Lock()
     concepts_with_word_ids_list = []
     words_without_id = []
     words_with_more_than_one_id = []
 
-    logger.info('Start creating threads.')
+    logger.info(f'Start creating {num_threads} threads.')
 
-    for i in range(10):
+    for i in range(num_threads):
         start_index = i * part_size
-        end_index = None if i == 9 else start_index + part_size
+        end_index = None if i == (num_threads - 1) else start_index + part_size
         data_part = concepts[start_index:end_index]
 
         thread = threading.Thread(target=process_concepts, args=(data_part, api_key, base_url, crud_role_dataset, dataset, results_lock, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id))
@@ -78,7 +78,6 @@ def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_wit
 
     with open(words_with_more_than_one_id_file, 'w', encoding='utf-8') as f:
         json.dump(words_with_more_than_one_id, f, ensure_ascii=False, indent=4)
-
 
 
 
