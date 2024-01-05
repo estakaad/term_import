@@ -17,8 +17,13 @@ def process_concepts(data_subset, api_key, base_url, crud_role_dataset, dataset,
                     continue
                 if word_ids:
                     if len(word_ids) == 1:
-                        word['wordId'] = word_ids[0]
-                        logger.info('1 word ID found in ' + dataset + ' for word ' + word['value'] + ': ' + str(word['wordId']))
+                        word_value = word['value']
+                        with results_lock:
+                            word['wordId'] = word_ids[0]
+                            word.pop('valuePrese', None)
+                            word.pop('lang', None)
+
+                        logger.info('1 word ID found in ' + dataset + ' for word ' + word_value + ': ' + str(word['wordId']))
                     elif len(word_ids) > 1:
                         logger.info(str(len(word_ids)) + ' word IDs found in ' + dataset + ' for word ' + word['value'])
 
