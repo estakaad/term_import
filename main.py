@@ -7,7 +7,6 @@ import utils
 logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
-#config_path = 'conf/mat_test.json'
 config_path = 'conf/kce_test.json'
 config, crud_role_dataset = load_config(config_path)
 
@@ -35,10 +34,10 @@ concepts_not_saved = get_file_path(crud_role_dataset, "concepts_files", "concept
 #sources.update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset)
 #sources.delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, api_key, base_url)
 
-# # CONCEPTS #
-words.update_word_ids(concepts_without_word_ids, concepts_with_word_ids,
-                  words_without_id, words_with_more_than_one_id,
-                  api_key, base_url, crud_role_dataset, dataset_for_checking_word_ids)
-
-# concepts.import_concepts(
-#     concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, api_key, base_url, 2)
+# # # CONCEPTS #
+# words.update_word_ids(concepts_without_word_ids, concepts_with_word_ids,
+#                   words_without_id, words_with_more_than_one_id,
+#                   api_key, base_url, crud_role_dataset, dataset_for_checking_word_ids)
+#
+concepts.import_concepts(
+    concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, api_key, base_url)
