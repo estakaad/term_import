@@ -4,16 +4,11 @@ import json
 
 logger = utils.log_config.get_logger()
 
-def create_source(source, api_key, base_url, crud_role_dataset):
+def create_source(session, source, base_url, crud_role_dataset):
 
-    header = {"ekilex-api-key": api_key}
-
-    parameters = {
-        'crudRoleDataset': crud_role_dataset
-    }
-
+    parameters = {'crudRoleDataset': crud_role_dataset}
     endpoint = base_url + "/api/source/create"
-    response = requests.post(endpoint, headers=header, params=parameters, json=source)
+    response = session.post(endpoint, params=parameters, json=source)
 
     if response.status_code >= 200 and response.status_code < 300:
         try:
@@ -32,7 +27,7 @@ def create_source(source, api_key, base_url, crud_role_dataset):
                        f"Response text: {response.text}")
     return None
 
-def create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, api_key, base_url, crud_role_dataset):
+def create_sources(session, sources_without_ids, sources_with_ids, ids_of_added_sources, base_url, crud_role_dataset):
 
     updated_sources = []
     ids_of_created_sources = []
@@ -44,7 +39,7 @@ def create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, 
         data = json.load(f)
 
         for source in data:
-            source_id = create_source(source, api_key, base_url, crud_role_dataset)
+            source_id = create_source(session, source, base_url, crud_role_dataset)
             if source_id:
                 source['id'] = source_id
                 updated_sources.append(source)
@@ -65,10 +60,9 @@ def create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, 
     return source_files_with_ids
 
 
-def delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, api_key, base_url):
-    list_of_ids_of_deleted_sources = []
+def delete_sources(session, ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, base_url):
 
-    header = {"ekilex-api-key": api_key}
+    list_of_ids_of_deleted_sources = []
 
     with open(ids_of_added_sources, 'r', encoding='utf-8') as file:
         source_ids = json.load(file)
@@ -83,7 +77,7 @@ def delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_datas
             'crudRoleDataset': crud_role_dataset
         }
 
-        response = requests.delete(endpoint, headers=header, params=params)
+        response = session.delete(endpoint, params=params)
 
         if response.status_code >= 200 and response.status_code < 300:
             logger.info(f"Successfully deleted source with ID {source_id}.")
@@ -100,16 +94,11 @@ def delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_datas
     logger.info('Number of deleted sources: ' + str(len(list_of_ids_of_deleted_sources)))
 
 
-def update_source(source, api_key, base_url, crud_role_dataset):
+def update_source(session, source, base_url, crud_role_dataset):
 
-    header = {"ekilex-api-key": api_key}
-
-    parameters = {
-        'crudRoleDataset': crud_role_dataset
-    }
-
+    parameters = {'crudRoleDataset': crud_role_dataset}
     endpoint = base_url + "/api/source/update"
-    response = requests.post(endpoint, headers=header, params=parameters, json=source)
+    response = session.post(endpoint, params=parameters, json=source)
 
     if response.status_code >= 200 and response.status_code < 300:
         try:
@@ -130,7 +119,7 @@ def update_source(source, api_key, base_url, crud_role_dataset):
     return None
 
 
-def update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset):
+def update_sources(session, sources_with_ids, ids_of_updated_sources, base_url, crud_role_dataset):
     list_of_ids_of_updated_sources = []
 
     logger.info(f'Started updating sources: {sources_with_ids}')
@@ -139,7 +128,7 @@ def update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, 
         data = json.load(f)
 
         for source in data:
-            result = update_source(source, api_key, base_url, crud_role_dataset)
+            result = update_source(session, source, base_url, crud_role_dataset)
             if result:
                 list_of_ids_of_updated_sources.append(source['id'])
 

@@ -5,18 +5,12 @@ import copy
 
 logger = utils.log_config.get_logger()
 
-def save_concept(session, concept, crud_role_dataset, api_key, base_url):
-    header = {"ekilex-api-key": api_key}
+def save_concept(session, concept, crud_role_dataset, base_url):
     parameters = {'crudRoleDataset': crud_role_dataset}
+    endpoint = base_url + '/api/term-meaning/save'
 
     try:
-        res = session.post(
-            f'{base_url}/api/term-meaning/save',
-            params=parameters,
-            json=concept,
-            headers=header,
-            timeout=5
-        )
+        res = session.post(endpoint, params=parameters, json=concept, timeout=5)
 
         if res.status_code != 200:
             logger.error(f"Failed to save concept. Received {res.status_code} status code.")
@@ -28,11 +22,10 @@ def save_concept(session, concept, crud_role_dataset, api_key, base_url):
         logger.error(f"Exception occurred while saving concept: {e}")
         return None
 
-def import_concepts(concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, api_key, base_url):
+def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, base_url):
     with open(concepts_with_word_ids, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    session = requests.Session()
     concepts_saved_list = []
     concepts_not_saved_list = []
 
@@ -40,7 +33,7 @@ def import_concepts(concepts_with_word_ids, concepts_saved, concepts_not_saved, 
 
     for concept in data:
         concept_copy = copy.copy(concept)
-        concept_id = save_concept(session, concept_copy, crud_role_dataset, api_key, base_url)
+        concept_id = save_concept(session, concept_copy, crud_role_dataset, base_url)
 
         if concept_id:
             concept_copy['id'] = concept_id

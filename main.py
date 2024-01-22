@@ -3,6 +3,8 @@ import src.sources as sources
 import src.words as words
 import src.concepts as concepts
 import utils
+import requests
+
 
 logger = utils.log_config.get_logger()
 
@@ -14,7 +16,11 @@ config, crud_role_dataset = load_config(config_path)
 api_key = config['api_settings']['api_key']
 base_url = config['api_settings']['base_url']
 dataset_for_checking_word_ids = config['parameters']['datasetForWordIds']
-#
+
+# Initialize a session and set the default header
+session = requests.Session()
+session.headers.update({"ekilex-api-key": api_key})
+
 # # Generating file paths
 sources_without_ids = get_file_path(crud_role_dataset, "sources_files", "sources_without_ids")
 sources_with_ids = get_file_path(crud_role_dataset, "sources_files", "sources_with_ids")
@@ -30,14 +36,14 @@ concepts_saved = get_file_path(crud_role_dataset, "concepts_files", "concepts_sa
 concepts_not_saved = get_file_path(crud_role_dataset, "concepts_files", "concepts_not_saved")
 
 # # SOURCES #
-#sources.create_sources(sources_without_ids, sources_with_ids, ids_of_added_sources, api_key, base_url, crud_role_dataset)
-#sources.update_sources(sources_with_ids, ids_of_updated_sources, api_key, base_url, crud_role_dataset)
-#sources.delete_sources(ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, api_key, base_url)
+#sources.create_sources(session, sources_without_ids, sources_with_ids, ids_of_added_sources, base_url, crud_role_dataset)
+#sources.update_sources(session, sources_with_ids, ids_of_updated_sources, base_url, crud_role_dataset)
+#sources.delete_sources(session, ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, base_url)
 
-# # # CONCEPTS #
-# words.update_word_ids(concepts_without_word_ids, concepts_with_word_ids,
+# # # # CONCEPTS #
+# words.update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids,
 #                   words_without_id, words_with_more_than_one_id,
-#                   api_key, base_url, crud_role_dataset, dataset_for_checking_word_ids)
-#
-concepts.import_concepts(
-    concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, api_key, base_url)
+#                   base_url, crud_role_dataset, dataset_for_checking_word_ids)
+
+concepts.import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved,
+                          crud_role_dataset, base_url)

@@ -4,21 +4,20 @@ import utils.log_config
 
 logger = utils.log_config.get_logger()
 
-def get_word_id(session, api_key, base_url, crud_role_dataset, dataset, word, lang):
-    header = {"ekilex-api-key": api_key}
+def get_word_id(session, base_url, crud_role_dataset, dataset, word, lang):
     parameters = {'crudRoleDataset': crud_role_dataset}
     try:
-        res = session.get(f'{base_url}/api/word/ids/{word}/{dataset}/{lang}', params=parameters, headers=header, timeout=5)
+        res = session.get(f'{base_url}/api/word/ids/{word}/{dataset}/{lang}', params=parameters, timeout=5)
         res.raise_for_status()
         return res.json()
     except requests.exceptions.RequestException as e:
         logger.error(f"Request error for word '{word}': {e}")
         return None
 
-def process_concepts(session, concepts, api_key, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id):
+def process_concepts(session, concepts, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id):
     for concept in concepts:
         for word in concept.get('words', []):
-            word_ids = get_word_id(session, api_key, base_url, crud_role_dataset, dataset, word['valuePrese'], word['lang'])
+            word_ids = get_word_id(session, base_url, crud_role_dataset, dataset, word['valuePrese'], word['lang'])
             if word_ids:
                 if len(word_ids) == 1:
                     word['wordId'] = word_ids[0]
@@ -33,7 +32,7 @@ def process_concepts(session, concepts, api_key, base_url, crud_role_dataset, da
                 words_without_id.append(word['valuePrese'])
         concepts_with_word_ids_list.append(concept)
 
-def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_without_id_file, words_with_more_than_one_id_file, api_key, base_url, crud_role_dataset, dataset):
+def update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids, words_without_id_file, words_with_more_than_one_id_file, base_url, crud_role_dataset, dataset):
     with open(concepts_without_word_ids, 'r', encoding='utf-8') as file:
         concepts = json.load(file)
 
@@ -41,11 +40,9 @@ def update_word_ids(concepts_without_word_ids, concepts_with_word_ids, words_wit
     words_without_id = []
     words_with_more_than_one_id = []
 
-    session = requests.Session()
-
     logger.info('Starting to process concepts.')
 
-    process_concepts(session, concepts, api_key, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id)
+    process_concepts(session, concepts, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id)
 
     logger.info('Saving the results.')
 
