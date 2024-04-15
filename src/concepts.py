@@ -5,6 +5,26 @@ import copy
 
 logger = utils.log_config.get_logger()
 
+
+def get_concept(session, id, crud_role_dataset, base_url):
+    parameters = {'crudRoleDataset': crud_role_dataset}
+
+    endpoint = f"{base_url}/api/term-meaning/details/{id}/{crud_role_dataset}"
+
+    try:
+        res = session.get(endpoint, params=parameters, timeout=5)
+
+        if res.status_code != 200:
+            logger.error(f"Failed to get concept. Received {res.status_code} status code.")
+            return None
+
+        return res.json()
+
+    except Exception as e:
+        logger.error(f"Exception occurred while getting concept: {e}")
+        return None
+
+
 def save_concept(session, concept, crud_role_dataset, base_url):
     parameters = {'crudRoleDataset': crud_role_dataset}
     endpoint = base_url + '/api/term-meaning/save'
@@ -50,3 +70,25 @@ def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_no
 
     with open(concepts_not_saved, 'w', encoding='utf-8') as f:
         json.dump(concepts_not_saved_list, f, ensure_ascii=False, indent=4)
+
+def get_all_concepts_from_dataset(session, concept_ids_file, concepts_with_all_data, base_url, crud_role_dataset):
+    with open(concept_ids_file, 'r', encoding='utf-8') as file:
+        concept_ids = json.load(file)
+
+    concepts_from_dataset = []
+
+    logger.info('Starting to fetch concepts...')
+
+    for concept_id in concept_ids:
+        concept_details = get_concept(session, concept_id, crud_role_dataset, base_url)
+
+        if concept_details is not None and 'meaningId' in concept_details:
+            logger.info(f"Fetched concept with ID {concept_details['meaningId']}")
+            concepts_from_dataset.append(concept_details)
+        else:
+            logger.warning(f"Concept fetched but didn't receive meaningId: {concept_id}")
+
+    logger.info('Saving the results.')
+
+    with open(concepts_with_all_data, 'w', encoding='utf-8') as file:
+        json.dump(concepts_from_dataset, file, ensure_ascii=False, indent=4)
