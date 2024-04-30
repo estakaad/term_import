@@ -54,3 +54,68 @@ def update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids, 
 
     with open(words_with_more_than_one_id_file, 'w', encoding='utf-8') as f:
         json.dump(words_with_more_than_one_id, f, ensure_ascii=False, indent=4)
+
+
+def get_word(session, id, crud_role_dataset, base_url):
+    parameters = {'crudRoleDataset': crud_role_dataset}
+
+    endpoint = f"{base_url}api/lex-word/details/{id}/{crud_role_dataset}"
+
+    try:
+        res = session.get(endpoint, params=parameters, timeout=5)
+
+        if res.status_code != 200:
+            logger.error(f"Failed to get word. Received {res.status_code} status code.")
+            return None
+
+        return res.json()
+
+    except Exception as e:
+        logger.error(f"Exception occurred while getting word: {e}")
+        return None
+
+
+def get_all_words(session, word_ids_file, words_with_all_data, base_url, crud_role_dataset):
+    with open(word_ids_file, 'r', encoding='utf-8') as file:
+        word_ids = json.load(file)
+
+    words = []
+
+    logger.info('Starting to fetch words...')
+
+    for word_id in word_ids:
+        word_details = get_word(session, word_id, crud_role_dataset, base_url)
+
+        if word_details is not None:
+            logger.info(f"Fetched word with ID {word_details['wordId']}")
+            words.append(word_details)
+        else:
+            logger.warning(f"Word fetched but didn't receive wordId: {word_id}")
+
+    logger.info('Saving the results.')
+
+    with open(words_with_all_data, 'w', encoding='utf-8') as file:
+        json.dump(words, file, ensure_ascii=False, indent=4)
+
+
+def get_all_words_without_gender(session, word_ids_file, words_with_all_data, base_url, crud_role_dataset):
+    with open(word_ids_file, 'r', encoding='utf-8') as file:
+        word_ids = json.load(file)
+
+    words = []
+
+    logger.info('Starting to fetch words...')
+
+    for word_id in word_ids:
+        word_details = get_word(session, word_id, crud_role_dataset, base_url)
+
+        if word_details is not None and word_details['genderCode'] is None:
+            logger.info(f"Fetched word with ID {word_details['wordId']}")
+            words.append(word_details)
+        else:
+            logger.warning(f"Word fetched but didn't receive wordId: {word_id}")
+
+    logger.info('Saving the results.')
+
+    with open(words_with_all_data, 'w', encoding='utf-8') as file:
+        json.dump(words, file, ensure_ascii=False, indent=4)
