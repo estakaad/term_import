@@ -5,12 +5,12 @@ import src.concepts as concepts
 import src.relations as relations
 import utils
 import requests
-
+import src.tags as tags
 
 logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
-config_path = 'conf/har_live.json'
+config_path = 'conf/has_live.json'
 config, crud_role_dataset = load_config(config_path)
 
 # Extracting API settings from the configuration
@@ -22,7 +22,8 @@ dataset_for_checking_word_ids = config['parameters']['datasetForWordIds']
 session = requests.Session()
 session.headers.update({"ekilex-api-key": api_key})
 
-# # Generating file paths
+# # # PATHS # # #
+
 sources_without_ids = get_file_path(crud_role_dataset, "sources_files", "sources_without_ids")
 sources_with_ids = get_file_path(crud_role_dataset, "sources_files", "sources_with_ids")
 ids_of_added_sources = get_file_path(crud_role_dataset, "sources_files", "ids_of_added_sources")
@@ -47,6 +48,10 @@ relations_with_ids = get_file_path(crud_role_dataset, "relations_files", "relati
 ids_of_added_relations = get_file_path(crud_role_dataset, "relations_files", "ids_of_added_relations")
 ids_of_deleted_relations = get_file_path(crud_role_dataset, "relations_files", "ids_of_deleted_relations")
 
+meaning_tags = get_file_path(crud_role_dataset, "tag_files", "meaning_tags")
+
+# # # REQUESTS # # #
+
 # # SOURCES #
 #sources.create_sources(session, sources_without_ids, sources_with_ids, ids_of_added_sources, base_url, crud_role_dataset)
 #sources.update_sources(session, sources_with_ids, ids_of_updated_sources, base_url, crud_role_dataset)
@@ -54,9 +59,9 @@ ids_of_deleted_relations = get_file_path(crud_role_dataset, "relations_files", "
 
 # CONCEPTS #
 
-# words.update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids,
-#                    words_without_id, words_with_more_than_one_id,
-#                     base_url, crud_role_dataset, dataset_for_checking_word_ids)
+words.update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids,
+                   words_without_id, words_with_more_than_one_id,
+                    base_url, crud_role_dataset, dataset_for_checking_word_ids)
 
 # concepts.import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved,
 #                           crud_role_dataset, base_url)
@@ -65,7 +70,11 @@ ids_of_deleted_relations = get_file_path(crud_role_dataset, "relations_files", "
 
 # WORDS #
 
-words.get_all_words_without_gender(session, word_ids, words_with_all_data, base_url, crud_role_dataset)
+#words.get_all_words(session, word_ids, words_with_all_data, base_url, crud_role_dataset)
+#words.save_words(session, words_with_all_data, crud_role_dataset, base_url)
 
 # RELATIONS
 #relations.create_relations(session, relations_without_ids, base_url, crud_role_dataset)
+
+# TAGS
+#tags.create_meaning_tags(session, meaning_tags, base_url, crud_role_dataset)

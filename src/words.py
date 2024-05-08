@@ -14,6 +14,7 @@ def get_word_id(session, base_url, crud_role_dataset, dataset, word, lang):
         logger.error(f"Request error for word '{word}': {e}")
         return None
 
+
 def process_concepts(session, concepts, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id):
     for concept in concepts:
         for word in concept.get('words', []):
@@ -31,6 +32,7 @@ def process_concepts(session, concepts, base_url, crud_role_dataset, dataset, co
                 logger.info(f'0 word IDs found in {dataset} for word {word["valuePrese"]}')
                 words_without_id.append(word['valuePrese'])
         concepts_with_word_ids_list.append(concept)
+
 
 def update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids, words_without_id_file, words_with_more_than_one_id_file, base_url, crud_role_dataset, dataset):
     with open(concepts_without_word_ids, 'r', encoding='utf-8') as file:
@@ -59,7 +61,7 @@ def update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids, 
 def get_word(session, id, crud_role_dataset, base_url):
     parameters = {'crudRoleDataset': crud_role_dataset}
 
-    endpoint = f"{base_url}api/lex-word/details/{id}/{crud_role_dataset}"
+    endpoint = f"{base_url}/api/lex-word/details/{id}/{crud_role_dataset}"
 
     try:
         res = session.get(endpoint, params=parameters, timeout=5)
@@ -98,24 +100,35 @@ def get_all_words(session, word_ids_file, words_with_all_data, base_url, crud_ro
         json.dump(words, file, ensure_ascii=False, indent=4)
 
 
-def get_all_words_without_gender(session, word_ids_file, words_with_all_data, base_url, crud_role_dataset):
-    with open(word_ids_file, 'r', encoding='utf-8') as file:
-        word_ids = json.load(file)
+def save_word(session, word, crud_role_dataset, base_url):
+    parameters = {'crudRoleDataset': crud_role_dataset}
+    endpoint = base_url + '/api/lex-word/save'
 
-    words = []
+    try:
+        res = session.post(endpoint, params=parameters, json=word, timeout=5)
 
-    logger.info('Starting to fetch words...')
+        if res.status_code != 200:
+            logger.error(f"Failed to save word {word}. Received {res.status_code} status code.")
+            return None
 
-    for word_id in word_ids:
-        word_details = get_word(session, word_id, crud_role_dataset, base_url)
+        return res.json().get('id')
 
-        if word_details is not None and word_details['genderCode'] is None:
-            logger.info(f"Fetched word with ID {word_details['wordId']}")
-            words.append(word_details)
+    except Exception as e:
+        logger.error(f"Exception occurred while saving word: {e}")
+        return None
+
+def save_words(session, words_with_details, crud_role_dataset, base_url):
+    with open(words_with_details, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    logger.info('Starting to process words.')
+
+    for word in data:
+        response = save_word(session, word, crud_role_dataset, base_url)
+
+        if response:
+            logger.info(f'Saved word {response}')
         else:
-            logger.warning(f"Word fetched but didn't receive wordId: {word_id}")
+            logger.warning(f"No response.")
 
-    logger.info('Saving the results.')
-
-    with open(words_with_all_data, 'w', encoding='utf-8') as file:
-        json.dump(words, file, ensure_ascii=False, indent=4)
+    logger.info('Finished saving words.')

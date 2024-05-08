@@ -40,6 +40,10 @@ def get_file_path(crud_role_dataset, file_category, file_key):
             "relations_with_ids": "relations_with_ids.json",
             "ids_of_added_relations": "ids_of_added_relations.json",
             "ids_of_deleted_relations": "ids_of_deleted_relations.json"
+        },
+        "tag_files": {
+            "meaning_tags": "meaning_tags.json",
+            "lexeme_tags": "lexeme_tags.json"
         }
     }
     return base_path + file_paths[file_category][file_key]
