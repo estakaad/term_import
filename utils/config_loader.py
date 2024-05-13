@@ -31,14 +31,16 @@ def get_file_path(crud_role_dataset, file_category, file_key):
             "concepts_saved": "concepts_saved.json",
             "concepts_not_saved": "concepts_not_saved.json"
         },
+        "meaning_files": {
+            "meanings_with_all_data": "meanings_with_all_data.json"
+        },
         "word_files": {
             "word_ids": "word_ids.json",
             "words_with_all_data": "words_with_all_data.json"
         },
         "relations_files": {
-            "relations_without_ids": "relations_without_ids.json",
-            "relations_with_ids": "relations_with_ids.json",
-            "ids_of_added_relations": "ids_of_added_relations.json",
+            "relations_with_meaning_ids": "relations_with_meaning_ids.json",
+            "meaning_relation_ids": "meaning_relation_ids.json",
             "ids_of_deleted_relations": "ids_of_deleted_relations.json"
         },
         "tag_files": {

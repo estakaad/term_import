@@ -39,3 +39,39 @@ def create_relations(session, relations_file_path, base_url, dataset_code):
                 count_created_relations += 1
 
     logger.info('Number of created relations: ' + str(count_created_relations))
+
+
+def delete_meaning_relations(session, ids_of_added_relations, ids_of_deleted_relations, base_url, crud_role_dataset):
+
+    logger.info(f'Base URL: {base_url}')
+    logger.info(f'crud_role_dataset: {crud_role_dataset}')
+
+    list_of_ids_of_deleted_relations = []
+
+    with open(ids_of_added_relations, 'r', encoding='utf-8') as file:
+        relation_ids = json.load(file)
+
+    endpoint = base_url + "/api/meaning_relation/delete"
+
+    logger.info(f"Number of meaning relations to be deleted: {len(relation_ids)}.")
+
+    for relation_id in relation_ids:
+        params = {
+            'relationId': relation_id,
+            'crudRoleDataset': crud_role_dataset
+        }
+
+        response = session.delete(endpoint, params=params)
+
+        if response.status_code >= 200 and response.status_code < 300:
+            logger.info(f"Successfully deleted meaning relation with ID {relation_id}.")
+            list_of_ids_of_deleted_relations.append(relation_id)
+        else:
+            logger.info(f"Failed to delete meaning relation with ID {relation_id}. Status code: {response.status_code}, "
+                        f"Response text: {response.text}")
+
+
+    with open(ids_of_deleted_relations, 'w', encoding='utf-8') as f:
+        json.dump(list_of_ids_of_deleted_relations, f, ensure_ascii=False, indent=4)
+
+    logger.info('Number of deleted meaning relations: ' + str(len(list_of_ids_of_deleted_relations)))
