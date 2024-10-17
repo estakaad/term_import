@@ -49,6 +49,8 @@ def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_no
     concepts_saved_list = []
     concepts_not_saved_list = []
 
+    logger.info('Base URL: ' + base_url)
+    logger.info('Dataset: ' + crud_role_dataset)
     logger.info('Starting to process concepts.')
 
     for concept in data:

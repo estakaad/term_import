@@ -25,6 +25,7 @@ def process_concepts(session, concepts, base_url, crud_role_dataset, dataset, co
                     logger.info(f'1 word ID found in {dataset} for word {word["valuePrese"]}: {word["wordId"]}')
                     word.pop('valuePrese', None)
                     word.pop('lang', None)
+                    word.pop('wordTypeCodes', None)
                 elif len(word_ids) > 1:
                     logger.info(f'{len(word_ids)} word IDs found in {dataset} for word {word["valuePrese"]}')
                     words_with_more_than_one_id.append(word['valuePrese'])
@@ -41,7 +42,8 @@ def update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids, 
     concepts_with_word_ids_list = []
     words_without_id = []
     words_with_more_than_one_id = []
-
+    logger.info('Base URL: ' + base_url)
+    logger.info('Dataset: ' + dataset)
     logger.info('Starting to process concepts.')
 
     process_concepts(session, concepts, base_url, crud_role_dataset, dataset, concepts_with_word_ids_list, words_without_id, words_with_more_than_one_id)

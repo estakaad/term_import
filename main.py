@@ -10,7 +10,7 @@ import src.tags as tags
 logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
-config_path = 'conf/har_live.json'
+config_path = 'conf/esterm_test.json'
 config, crud_role_dataset = load_config(config_path)
 
 # Extracting API settings from the configuration
@@ -59,7 +59,7 @@ meaning_tags = get_file_path(crud_role_dataset, "tag_files", "meaning_tags")
 #sources.delete_sources(session, ids_of_added_sources, ids_of_deleted_sources, crud_role_dataset, base_url)
 
 # CONCEPTS #
-#
+
 # words.update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids,
 #                    words_without_id, words_with_more_than_one_id,
 #                     base_url, crud_role_dataset, dataset_for_checking_word_ids)
@@ -76,7 +76,7 @@ meaning_tags = get_file_path(crud_role_dataset, "tag_files", "meaning_tags")
 #words.save_words(session, words_with_all_data, crud_role_dataset, base_url)
 
 # RELATIONS
-relations.create_relations(session, relations_with_meaning_ids, base_url, crud_role_dataset)
+#relations.create_relations(session, relations_with_meaning_ids, base_url, crud_role_dataset)
 #relations.delete_meaning_relations(session, meaning_relation_ids, ids_of_deleted_relations, base_url, crud_role_dataset)
 
 # TAGS
