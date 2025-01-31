@@ -9,7 +9,7 @@ logger = utils.log_config.get_logger()
 def get_concept(session, id, crud_role_dataset, base_url):
     parameters = {'crudRoleDataset': crud_role_dataset}
 
-    endpoint = f"{base_url}api/term-meaning/details/{id}/{crud_role_dataset}"
+    endpoint = f"{base_url}/api/term-meaning/details/{id}/{crud_role_dataset}"
 
     try:
         res = session.get(endpoint, params=parameters, timeout=5)
