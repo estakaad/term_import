@@ -10,7 +10,7 @@ import src.tags as tags
 logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
-config_path = 'conf/eki_prelive.json'
+config_path = 'conf/esterm_test.json'
 config, crud_role_dataset = load_config(config_path)
 
 # Extracting API settings from the configuration
@@ -64,8 +64,8 @@ lexeme_tags = get_file_path(crud_role_dataset, "tag_files", "lexeme_tags")
 #                    words_without_id, words_with_more_than_one_id,
 #                     base_url, crud_role_dataset, dataset_for_checking_word_ids)
 
-#concepts.import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved,
-#                          crud_role_dataset, base_url)
+concepts.import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved,
+                          crud_role_dataset, base_url)
 
 #concepts.get_all_concepts_from_dataset(session, concept_ids, concepts_with_all_data, base_url, crud_role_dataset)
 #concepts.get_all_meanings(session, concept_ids, meanings_with_all_data, base_url, crud_role_dataset)
@@ -81,4 +81,4 @@ lexeme_tags = get_file_path(crud_role_dataset, "tag_files", "lexeme_tags")
 
 # TAGS
 #tags.create_meaning_tags(session, meaning_tags, base_url, crud_role_dataset)
-tags.create_lexeme_tags(session, lexeme_tags, base_url, crud_role_dataset)
+#tags.create_lexeme_tags(session, lexeme_tags, base_url, crud_role_dataset)

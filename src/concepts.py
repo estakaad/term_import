@@ -59,7 +59,7 @@ def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_no
 
         if concept_id:
             concept_copy['id'] = concept_id
-            logger.info(f'Created concept with ID {concept_id}')
+            logger.info(f'Saved concept with ID {concept_id}')
             concepts_saved_list.append(concept_copy)
         else:
             logger.warning(f"Concept saved but didn't receive an ID.")
