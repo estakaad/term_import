@@ -25,12 +25,17 @@ def get_concept(session, id, crud_role_dataset, base_url):
         return None
 
 
-def save_concept(session, concept, crud_role_dataset, base_url):
-    parameters = {'crudRoleDataset': crud_role_dataset}
+def save_concept(session, concept, crud_role_dataset, base_url, isManualEventOnUpdateEnabled):
+    logger.info(f"save_concept called with isManualEventOnUpdateEnabled: {isManualEventOnUpdateEnabled} (type: {type(isManualEventOnUpdateEnabled)})")
+
+    parameters = {'crudRoleDataset': crud_role_dataset, 'isManualEventOnUpdateEnabled': isManualEventOnUpdateEnabled}
     endpoint = base_url + '/api/term-meaning/save'
+    logger.info(f"Request parameters: {parameters}")
+
 
     try:
         res = session.post(endpoint, params=parameters, json=concept, timeout=5)
+        logger.info(f"Request URL: {res.request.url}")
 
         if res.status_code != 200:
             logger.error(f"Failed to save concept. Received {res.status_code} status code.")
@@ -42,7 +47,7 @@ def save_concept(session, concept, crud_role_dataset, base_url):
         logger.error(f"Exception occurred while saving concept: {e}")
         return None
 
-def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, base_url):
+def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved, crud_role_dataset, base_url, isManualEventOnUpdateEnabled):
     with open(concepts_with_word_ids, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
@@ -55,7 +60,7 @@ def import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_no
 
     for concept in data:
         concept_copy = copy.copy(concept)
-        concept_id = save_concept(session, concept_copy, crud_role_dataset, base_url)
+        concept_id = save_concept(session, concept_copy, crud_role_dataset, base_url, isManualEventOnUpdateEnabled)
 
         if concept_id:
             concept_copy['id'] = concept_id

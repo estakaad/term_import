@@ -6,9 +6,10 @@ def load_config(file_path):
         config = json.load(config_file)
 
     crud_role_dataset = config['parameters']['crudRoleDataset']
+    isManualEventOnUpdateEnabled = config['parameters']['isManualEventOnUpdateEnabled']
     config['parameters']['baseFilePath'] = f"files/{crud_role_dataset}/"
 
-    return config, crud_role_dataset
+    return config, crud_role_dataset, isManualEventOnUpdateEnabled
 
 
 def get_file_path(crud_role_dataset, file_category, file_key):

@@ -10,8 +10,14 @@ import src.tags as tags
 logger = utils.log_config.get_logger()
 
 # Load the configuration and crud_role_dataset
-config_path = 'conf/esterm_test.json'
-config, crud_role_dataset = load_config(config_path)
+#config_path = 'conf/esterm_test.json'
+#config_path = 'conf/esterm_prelive.json'
+config_path = 'conf/esterm_live.json'
+config, crud_role_dataset, isManualEventOnUpdateEnabled = load_config(config_path)
+print(f"DEBUG: isManualEventOnUpdateEnabled = {isManualEventOnUpdateEnabled} (type: {type(isManualEventOnUpdateEnabled)})")
+logger.info(f"Loaded isManualEventOnUpdateEnabled: {isManualEventOnUpdateEnabled} (type: {type(isManualEventOnUpdateEnabled)})")
+
+
 
 # Extracting API settings from the configuration
 api_key = config['api_settings']['api_key']
@@ -63,9 +69,9 @@ lexeme_tags = get_file_path(crud_role_dataset, "tag_files", "lexeme_tags")
 # words.update_word_ids(session, concepts_without_word_ids, concepts_with_word_ids,
 #                    words_without_id, words_with_more_than_one_id,
 #                     base_url, crud_role_dataset, dataset_for_checking_word_ids)
-
+#
 concepts.import_concepts(session, concepts_with_word_ids, concepts_saved, concepts_not_saved,
-                          crud_role_dataset, base_url)
+                          crud_role_dataset, base_url, isManualEventOnUpdateEnabled)
 
 #concepts.get_all_concepts_from_dataset(session, concept_ids, concepts_with_all_data, base_url, crud_role_dataset)
 #concepts.get_all_meanings(session, concept_ids, meanings_with_all_data, base_url, crud_role_dataset)
