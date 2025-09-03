@@ -1,10 +1,4 @@
 # Utiliidid terminikogude importimiseks Ekilexi
-Sisaldab:
-- Allikate
-  - Loomine
-  - Uuendamine
-  - Kustutamine
-- Mõistete loomine (sealhulgas kontrollitakse keelendi olemasolu ÜS-is)
 
 Debugimise lihtsustamiseks salvestatakse vahepealsed tulemused failidesse. 
 
